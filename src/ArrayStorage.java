@@ -1,30 +1,49 @@
+import java.util.Arrays;
+
 /**
  * Array based storage for Resumes
  */
 public class ArrayStorage {
-    Resume[] storage = new Resume[10000];
+    private Resume[] storage = new Resume[10000];
+    private int lastIndex = 0; // index after last element
 
     void clear() {
+        Arrays.fill(storage, null);
+        lastIndex = 0;
     }
 
     void save(Resume r) {
+        storage[lastIndex++] = r; // сохранить резюме в конец массива
     }
 
     Resume get(String uuid) {
+        for (int i = 0; i < lastIndex; i++) {
+            if (storage[i].uuid.equals(uuid))
+                return storage[i];
+        }
         return null;
     }
 
     void delete(String uuid) {
+        // найти нужное резюме
+        // заменить его последним элементом
+        for (int i = 0; i < lastIndex; i++) {
+            if (storage[i].uuid.equals(uuid)) {
+                storage[i] = storage[lastIndex - 1];
+                storage[--lastIndex] = null;
+                break;
+            }
+        }
     }
 
     /**
      * @return array, contains only Resumes in storage (without null)
      */
     Resume[] getAll() {
-        return new Resume[0];
+        return Arrays.copyOfRange(storage, 0, lastIndex);
     }
 
     int size() {
-        return 0;
+        return lastIndex;
     }
 }
