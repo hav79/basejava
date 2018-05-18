@@ -8,12 +8,13 @@ public class ArrayStorage {
     private int lastIndex = 0; // index after last element
 
     void clear() {
-        Arrays.fill(storage, null);
+        Arrays.fill(storage, 0, lastIndex, null);
         lastIndex = 0;
     }
 
     void save(Resume r) {
-        storage[lastIndex++] = r; // сохранить резюме в конец массива
+        if (lastIndex < storage.length - 1)
+            storage[lastIndex++] = r; // сохранить резюме в конец массива
     }
 
     Resume get(String uuid) {
@@ -40,7 +41,7 @@ public class ArrayStorage {
      * @return array, contains only Resumes in storage (without null)
      */
     Resume[] getAll() {
-        return Arrays.copyOfRange(storage, 0, lastIndex);
+        return Arrays.copyOf(storage, lastIndex);
     }
 
     int size() {
